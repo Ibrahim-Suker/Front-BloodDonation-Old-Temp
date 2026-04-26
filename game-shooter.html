@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immunity Defender - Shooter</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* تصميم هيدر صفحة الألعاب */
+.page-header-games {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* خلفية كحلية غامقة */
+    padding: 100px 0;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--primary-color); /* خط أحمر من تحت */
+}
+
+/* تأثير إضاءة حمراء خفيفة في الخلفية */
+.page-header-games::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(239, 61, 50, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* تحسين شكل الـ Breadcrumb */
+.breadcrumb {
+    background: rgba(255, 255, 255, 0.05); /* خلفية شفافة خفيفة */
+    display: inline-flex;
+    padding: 10px 25px;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    margin-bottom: 0;
+}
+
+.breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.breadcrumb-item a:hover {
+    color: white !important;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: var(--primary-color) !important; /* اللون الأحمر الأساسي */
+    font-weight: bold;
+}
+
+/* لون الفاصل (/) */
+.breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.4);
+}
+        /* Placeholder Card */
+        .game-placeholder {
+            width: 100%;
+            max-width: 850px;
+            height: 450px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #001f3f, #003366); /* أزرق داكن (جو ميكروسكوبي) */
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #00d2ff;
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.3);
+        }
+
+        /* Fullscreen Wrapper */
+        #game-wrapper {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #0a0a2a 0%, #000000 100%);
+            position: relative;
+            overflow: hidden;
+            cursor: none; /* إخفاء الماوس */
+        }
+        #game-wrapper:fullscreen { display: block; }
+
+        canvas { display: block; width: 100%; height: 100%; }
+
+        /* UI Layer */
+        #ui-layer {
+            position: absolute;
+            top: 20px; left: 20px; right: 20px;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .hud-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #00d2ff;
+            color: #00d2ff;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            text-shadow: 0 0 5px #00d2ff;
+        }
+
+        /* Screens */
+        .overlay-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            color: white;
+            text-align: center;
+        }
+        .hidden { display: none !important; }
+
+        .btn-sci {
+            background: linear-gradient(45deg, #0074e4, #00d2ff);
+            border: none;
+            color: white;
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%);
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .btn-sci:hover { transform: scale(1.05); box-shadow: 0 0 30px #00d2ff; }
+
+        .tutorial-icons { font-size: 3rem; margin: 20px 0; }
+        .damage-flash { animation: flashRed 0.2s; }
+        @keyframes flashRed { 0% { box-shadow: inset 0 0 0 transparent; } 50% { box-shadow: inset 0 0 50px red; } }
+
+        /* Powerup Notification */
+        #powerup-msg {
+            position: absolute;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: bold;
+            color: yellow;
+            text-shadow: 0 0 20px orange;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        #powerup-msg.show { opacity: 1; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="Blood Buddies" height="55">
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse mt-3 mt-lg-0" id="mainNav">
+                
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 main-menu fw-bold">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Blood Services</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Actions</h6></li>
+                            <li><a class="dropdown-item py-2" href="donor.html"><i class="fa-solid fa-magnifying-glass me-2 text-theme"></i> Find a Donor</a></li>
+                            <li><a class="dropdown-item py-2" href="seeker.html"><i class="fa-solid fa-hand-holding-heart me-2 text-theme"></i> Request Blood</a></li>
+                            <li><a class="dropdown-item py-2" href="chat.html"><i class="fa-solid fa-comments me-2 text-theme "></i> Messages</a></li>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Learn</h6></li>
+                            <li><a class="dropdown-item py-2" href="am-i-eligible.html">Am I Eligible?</a></li>
+                            <li><a class="dropdown-item py-2" href="about-blood.html">What Is Blood?</a></li>
+                            <li><a class="dropdown-item py-2" href="blood-types.html">Blood Types</a></li>
+                            <li><a class="dropdown-item py-2" href="basics.html">Donation Basics</a></li>
+                            <li><a class="dropdown-item py-2" href="prepare-to-donate.html">Prepare to Donate</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Community</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2" href="campaigns.html">Our Campaigns</a></li>
+                            <li><a class="dropdown-item py-2" href="blog.html">Latest News (Blog)</a></li>
+                            <li><a class="dropdown-item py-2" href="games.html">Games Area</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2" href="about-us.html">About Us</a></li>
+                            <li><a class="dropdown-item py-2" href="team.html">Our Team</a></li>
+                            <li><a class="dropdown-item py-2" href="gallery.html">Photo Gallery</a></li>
+                            <li><a class="dropdown-item py-2" href="faq.html">FAQs</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-globe me-1 text-theme"></i> Lang
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index.html"><span>English</span><img src="https://flagcdn.com/w20/us.png" width="20"></a></li>
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index-ar.html"><span style="font-family: 'Cairo', sans-serif;">العربية</span><img src="https://flagcdn.com/w20/eg.png" width="20"></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <div class="d-flex align-items-lg-center mt-3 mt-lg-0 flex-column flex-lg-row gap-3">
+                    <a href="login.html" class="text-dark text-decoration-none fw-semibold d-flex align-items-center me-lg-3 transition-hover">
+                        <i class="fa-regular fa-circle-user fs-5 me-2 text-theme"></i> Login
+                    </a>
+                    <a href="signup.html" class="btn btn-outline-theme fw-bold px-4 rounded-pill">Sign Up</a>
+                    <a href="contact.html" class="btn btn-theme text-white fw-bold px-4 rounded-pill shadow-sm">Contact</a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+<header class="page-header-games">
+    <div class="container" data-aos="fade-up">
+        <h1 class="display-4 fw-bold mb-4">Play & Save Lives 🎮</h1>
+        
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item">
+                    <a href="index.html" class="text-decoration-none">
+                        <i class="fa-solid fa-house me-1"></i> Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="games.html" class="text-decoration-none">Games</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Immunity Defender 🛡️
+                </li>
+            </ol>
+        </nav>
+    </div>
+</header>
+
+    <section class="section-padding text-center bg-dark text-white">
+        <div class="container">
+            <h2 class="fw-bold mb-3 text-info">Immunity Defender 🛡️</h2>
+            <p class="text-white-50 mb-5">You are the White Blood Cell. Shoot down the viruses protecting the body!</p>
+
+            <div class="game-placeholder">
+                <div class="z-2">
+                    <i class="fa-solid fa-virus-slash fa-4x mb-3 text-info"></i>
+                    <h3 class="fw-bold">Mission: Destroy Viruses</h3>
+                    <p class="mb-4 text-info">Drag to move • Auto Shoot</p>
+                    <button class="btn-sci" onclick="enterGameMode()">DEPLOY</button>
+                </div>
+
+                <div id="game-wrapper">
+                    <canvas id="gameCanvas"></canvas>
+                    
+                    <div id="ui-layer">
+                        <div class="hud-box">SCORE: <span id="scoreVal">0</span></div>
+                        <div class="hud-box text-danger">HEALTH: <span id="healthVal">100</span>%</div>
+                    </div>
+                    
+                    <div id="powerup-msg">DOUBLE SHOT!</div>
+
+                    <div id="tutorial-screen" class="overlay-screen">
+                        <h1 class="text-info fw-bold mb-3">HOW TO PLAY</h1>
+                        <p class="fs-5">Drag your finger or mouse to move.</p>
+                        <p class="text-white-50">Shooting is AUTOMATIC.</p>
+                        
+                        <div class="row g-4 my-4 justify-content-center">
+                            <div class="col-4">
+                                <div class="fs-1">🛡️</div>
+                                <div class="text-info fw-bold">YOU</div>
+                                <small>White Blood Cell</small>
+                            </div>
+                            <div class="col-4">
+                                <div class="fs-1">🦠</div>
+                                <div class="text-danger fw-bold">ENEMY</div>
+                                <small>Viruses</small>
+                            </div>
+                            <div class="col-4">
+                                <div class="fs-1">⚡</div>
+                                <div class="text-warning fw-bold">POWER</div>
+                                <small>Weapon Upgrades</small>
+                            </div>
+                        </div>
+
+                        <button class="btn-sci" onclick="startGame()">START DEFENSE</button>
+                    </div>
+
+                    <div id="game-over-screen" class="overlay-screen hidden">
+                        <h1 class="text-danger fw-bold display-3 mb-2">DEFENSE BREACHED</h1>
+                        <p class="fs-4">Final Score: <span id="finalScore" class="text-warning fw-bold">0</span></p>
+                        
+                        <div class="my-4 p-4 border border-info rounded bg-dark">
+                            <i class="fa-solid fa-user-doctor fa-3x text-info mb-3"></i>
+                            <h4>Keep your real immunity strong!</h4>
+                            <p class="text-white-50 small">Eating healthy and donating blood helps save lives.</p>
+                            <a href="seeker.html" class="btn btn-sm btn-info fw-bold px-4 rounded-pill">Donate Blood</a>
+                        </div>
+
+                        <button class="btn-sci" onclick="startGame()">RETRY MISSION</button>
+                        <button class="btn btn-link text-white mt-3" onclick="exitGameMode()">Exit</button>
+                    </div>
+
+                </div>
+            </div>
+            <p class="mt-4 small text-white-50">Works on Mobile & Desktop (Touch/Mouse)</p>
+        </div>
+    </section>
+
+    <script>
+        const wrapper = document.getElementById('game-wrapper');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const tutorialScreen = document.getElementById('tutorial-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const powerMsg = document.getElementById('powerup-msg');
+
+        let isPlaying = false;
+        let score = 0;
+        let health = 100;
+        let frame = 0;
+        let animationId;
+
+        // Player (White Blood Cell)
+        let player = { x: 0, y: 0, r: 25, speed: 0, weaponLevel: 1 };
+        
+        // Entities
+        let bullets = [];
+        let enemies = [];
+        let particles = [];
+        let powerups = [];
+
+        // Mouse/Touch Position
+        let targetX = 0;
+        let targetY = 0;
+
+        function enterGameMode() {
+            if (wrapper.requestFullscreen) wrapper.requestFullscreen();
+            else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+            wrapper.style.display = 'block';
+            tutorialScreen.classList.remove('hidden');
+            gameOverScreen.classList.add('hidden');
+        }
+
+        function exitGameMode() {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                isPlaying = false;
+                wrapper.style.display = 'none';
+                cancelAnimationFrame(animationId);
+            } else {
+                resize();
+                // Initialize positions
+                player.x = canvas.width / 2;
+                player.y = canvas.height - 100;
+                targetX = player.x;
+                targetY = player.y;
+            }
+        });
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        // --- Controls (Mouse & Touch) ---
+        // اللعبة بتعتمد على تتبع الماوس/اللمس
+        function updateInput(x, y) {
+            targetX = x;
+            targetY = y;
+            // Limit player Y to bottom area
+            if (targetY < canvas.height - 200) targetY = canvas.height - 200;
+        }
+
+        canvas.addEventListener('mousemove', e => updateInput(e.clientX, e.clientY));
+        canvas.addEventListener('touchmove', e => {
+            e.preventDefault();
+            updateInput(e.touches[0].clientX, e.touches[0].clientY);
+        }, {passive: false});
+
+        function startGame() {
+            tutorialScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            score = 0;
+            health = 100;
+            player.weaponLevel = 1;
+            bullets = [];
+            enemies = [];
+            particles = [];
+            powerups = [];
+            isPlaying = true;
+            updateHUD();
+            loop();
+        }
+
+        function loop() {
+            if(!isPlaying) return;
+
+            // Clear
+            ctx.fillStyle = 'rgba(10, 10, 42, 0.3)'; // Trail effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Move Player (Smooth lerp)
+            player.x += (targetX - player.x) * 0.15;
+            player.y += (targetY - player.y) * 0.15;
+
+            // Draw Player
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = '#00d2ff';
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
+            ctx.fill();
+            // Core
+            ctx.fillStyle = '#00d2ff';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.r * 0.6, 0, Math.PI*2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Auto Shoot
+            if (frame % 10 === 0) shoot();
+
+            // Bullets
+            ctx.fillStyle = '#00ff00'; // Antibody color
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                let b = bullets[i];
+                b.y -= 15;
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, 5, 0, Math.PI*2);
+                ctx.fill();
+                if(b.y < 0) bullets.splice(i, 1);
+            }
+
+            // Enemies
+            if (frame % 40 === 0) spawnEnemy();
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                let e = enemies[i];
+                e.y += e.speed;
+                e.angle += 0.05;
+
+                // Draw Enemy (Virus shape)
+                ctx.save();
+                ctx.translate(e.x, e.y);
+                ctx.rotate(e.angle);
+                ctx.font = `${e.size}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(e.emoji, 0, 0);
+                ctx.restore();
+
+                // Collision with Bullets
+                for (let j = bullets.length - 1; j >= 0; j--) {
+                    let b = bullets[j];
+                    let dist = Math.hypot(b.x - e.x, b.y - e.y);
+                    if (dist < e.size/1.5) {
+                        // Hit
+                        e.hp--;
+                        bullets.splice(j, 1);
+                        createParticles(e.x, e.y, '#00ff00', 3);
+                        if(e.hp <= 0) {
+                            score += e.score;
+                            createParticles(e.x, e.y, '#ff0000', 10);
+                            // Drop Powerup?
+                            if(Math.random() < 0.1) spawnPowerup(e.x, e.y);
+                            enemies.splice(i, 1);
+                        }
+                        break;
+                    }
+                }
+
+                // Collision with Player
+                let pDist = Math.hypot(player.x - e.x, player.y - e.y);
+                if (pDist < player.r + e.size/2) {
+                    takeDamage(10);
+                    enemies.splice(i, 1);
+                    createParticles(player.x, player.y, '#ff0000', 15);
+                } else if (e.y > canvas.height) {
+                     takeDamage(5); // Passed enemy penalty
+                     enemies.splice(i, 1);
+                }
+            }
+
+            // Powerups
+            for(let i=powerups.length-1; i>=0; i--){
+                let p = powerups[i];
+                p.y += 3;
+                ctx.font = "30px Arial";
+                ctx.fillText("⚡", p.x, p.y);
+                
+                if(Math.hypot(player.x - p.x, player.y - p.y) < 40) {
+                    player.weaponLevel = Math.min(player.weaponLevel + 1, 3);
+                    showPowerMsg("WEAPON UPGRADE!");
+                    powerups.splice(i, 1);
+                } else if(p.y > canvas.height) powerups.splice(i, 1);
+            }
+
+            // Particles
+            for(let i=particles.length-1; i>=0; i--){
+                let p = particles[i];
+                p.x += p.vx; p.y += p.vy; p.life--;
+                ctx.globalAlpha = p.life / 20;
+                ctx.fillStyle = p.col;
+                ctx.fillRect(p.x, p.y, 4, 4);
+                ctx.globalAlpha = 1;
+                if(p.life<=0) particles.splice(i, 1);
+            }
+
+            updateHUD();
+            if (health <= 0) endGame();
+            
+            frame++;
+            animationId = requestAnimationFrame(loop);
+        }
+
+        function shoot() {
+            if(player.weaponLevel === 1) {
+                bullets.push({x: player.x, y: player.y - 20});
+            } else if (player.weaponLevel === 2) {
+                bullets.push({x: player.x - 15, y: player.y});
+                bullets.push({x: player.x + 15, y: player.y});
+            } else { // Level 3
+                bullets.push({x: player.x, y: player.y - 20});
+                bullets.push({x: player.x - 20, y: player.y + 10});
+                bullets.push({x: player.x + 20, y: player.y + 10});
+            }
+        }
+
+        function spawnEnemy() {
+            const types = [
+                { emoji: '🦠', hp: 2, size: 40, speed: 3, score: 10 },
+                { emoji: '👾', hp: 5, size: 50, speed: 2, score: 30 },
+                { emoji: '💀', hp: 10, size: 70, speed: 1, score: 100 } // Mini boss
+            ];
+            
+            // Difficulty scaling
+            let r = Math.random();
+            let type = r < 0.1 ? types[2] : (r < 0.4 ? types[1] : types[0]);
+
+            enemies.push({
+                x: Math.random() * (canvas.width - 50) + 25,
+                y: -50,
+                ...type,
+                angle: 0
+            });
+        }
+
+        function spawnPowerup(x, y) {
+            powerups.push({x, y});
+        }
+
+        function createParticles(x, y, col, count) {
+            for(let i=0; i<count; i++) {
+                particles.push({
+                    x, y, 
+                    vx: (Math.random()-0.5)*10, 
+                    vy: (Math.random()-0.5)*10,
+                    life: 20, col
+                });
+            }
+        }
+
+        function takeDamage(amount) {
+            health -= amount;
+            wrapper.classList.add('damage-flash');
+            setTimeout(()=>wrapper.classList.remove('damage-flash'), 100);
+        }
+
+        function showPowerMsg(txt) {
+            powerMsg.innerText = txt;
+            powerMsg.classList.add('show');
+            setTimeout(()=>powerMsg.classList.remove('show'), 1500);
+        }
+
+        function updateHUD() {
+            document.getElementById('scoreVal').innerText = score;
+            document.getElementById('healthVal').innerText = Math.max(0, health);
+        }
+
+        function endGame() {
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            document.getElementById('finalScore').innerText = score;
+            gameOverScreen.classList.remove('hidden');
+        }
+
+    </script>
+</body>
+ <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="footer-top section-padding">
+            <div class="container">
+                <div class="row g-4">
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <a href="index.html" class="footer-logo d-inline-block mb-4 bg-white p-3 rounded">
+                                <img src="images/logo.png" alt="Logo" height="40">
+                            </a>
+                            <p class="text-white-50 mb-4">
+                                We are the world's largest and most trusted blood donation center. We have been working since 1973 with a prestigious vision to help patients.
+                            </p>
+                            <div class="social-links">
+                                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Quick Links</h5>
+                            <ul class="footer-links list-unstyled">
+                                <li><a href="about-us.html"><i class="fa-solid fa-angle-right"></i> About Us</a></li>
+                                <li><a href="campaigns.html"><i class="fa-solid fa-angle-right"></i> Our Campaigns</a></li>
+                                <li><a href="donor.html"><i class="fa-solid fa-angle-right"></i> Find a Donor</a></li>
+                                <li><a href="seeker.html"><i class="fa-solid fa-angle-right"></i> Request Blood</a></li>
+                                <li><a href="blog.html"><i class="fa-solid fa-angle-right"></i> Latest News</a></li>
+                                <li><a href="contact.html"><i class="fa-solid fa-angle-right"></i> Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Latest Campaigns</h5>
+                            
+                            <div class="recent-post-item d-flex align-items-center mb-3">
+                                <div class="recent-img me-3">
+                                    <img src="images/event_1.jpg" alt="Campaign" class="img-fluid rounded">
+                                </div>
+                                <div class="recent-text">
+                                    <h6 class="mb-1"><a href="campaign-single.html" class="text-white text-decoration-none">Blood Group Collection</a></h6>
+                                    <small class="text-theme"><i class="fa-regular fa-calendar me-1"></i> 12 Jan, 2025</small>
+                                </div>
+                            </div>
+
+                            <div class="recent-post-item d-flex align-items-center">
+                                <div class="recent-img me-3">
+                                    <img src="images/event_2.jpg" alt="Campaign" class="img-fluid rounded">
+                                </div>
+                                <div class="recent-text">
+                                    <h6 class="mb-1"><a href="campaign-single.html" class="text-white text-decoration-none">Free Blood Checking</a></h6>
+                                    <small class="text-theme"><i class="fa-regular fa-calendar me-1"></i> 18 Feb, 2025</small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Subscribe Us</h5>
+                            <p class="text-white-50 small mb-3">Signup for our newsletter to get the latest news in your inbox.</p>
+                            
+                            <form class="newsletter-form mb-4">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Email Address" required>
+                                    <button class="btn btn-theme" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </form>
+
+                            <div class="contact-info">
+                                <p class="mb-2 text-white-50"><i class="fa-solid fa-location-dot text-theme me-2"></i> 123 Tahrir Square, Cairo</p>
+                                <p class="mb-0 text-white-50"><i class="fa-solid fa-phone text-theme me-2"></i> +20 100 123 4567</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0 small text-white-50">&copy; 2025 <strong>Blood Buddies</strong>. All Rights Reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-bottom-links">
+                            <a href="#" class="small text-white-50 text-decoration-none me-3">Privacy Policy</a>
+                            <a href="#" class="small text-white-50 text-decoration-none">Terms of Use</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</html>

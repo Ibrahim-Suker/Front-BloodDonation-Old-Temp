@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade - Blood Buddies</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* --- Games Page Header --- */
+.page-header-games {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* خلفية غامقة */
+    padding: 100px 0;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--primary-color); /* الخط الأحمر المميز */
+}
+
+/* تأثير الإضاءة (Glow) في الخلفية */
+.page-header-games::before {
+    content: '';
+    position: absolute;
+    top: -20%; right: -5%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(239, 61, 50, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* تنسيق شريط التنقل (Breadcrumb) */
+.page-header-games .breadcrumb {
+    background: rgba(255, 255, 255, 0.05); /* خلفية زجاجية */
+    display: inline-flex;
+    padding: 8px 25px;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0;
+}
+
+.page-header-games .breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.page-header-games .breadcrumb-item a:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+.page-header-games .breadcrumb-item.active {
+    color: var(--primary-color); /* اللون الأحمر للعنصر الحالي */
+    font-weight: 700;
+}
+
+/* لون الفاصل المائل (/) */
+.page-header-games .breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.3);
+}
+        .page-header-games {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 80px 0;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* دوائر زخرفية في الخلفية */
+        .page-header-games::before {
+            content: '';
+            position: absolute;
+            top: -50px; right: -50px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, #ef3d32 0%, transparent 70%);
+            opacity: 0.2;
+            border-radius: 50%;
+        }
+
+        .game-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: white;
+            height: 100%;
+            position: relative;
+            border: 1px solid #eee;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .game-thumb {
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* خلفيات مختلفة لكل لعبة */
+        .thumb-collection { background: linear-gradient(45deg, #2b0a0a, #680f0f); }
+        .thumb-shooter { background: linear-gradient(45deg, #001f3f, #003366); }
+
+        .game-icon {
+            font-size: 5rem;
+            color: white;
+            z-index: 2;
+            transition: transform 0.3s;
+        }
+        
+        .game-card:hover .game-icon {
+            transform: scale(1.2);
+        }
+
+        .play-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+            width: 100%;
+            display: block;
+        }
+        .play-btn:hover {
+            background-color: #d32f2f;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .game-badge {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="Blood Buddies" height="55">
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse mt-3 mt-lg-0" id="mainNav">
+                
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 main-menu fw-bold">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Blood Services</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Actions</h6></li>
+                            <li><a class="dropdown-item py-2" href="donor.html"><i class="fa-solid fa-magnifying-glass me-2 text-theme"></i> Find a Donor</a></li>
+                            <li><a class="dropdown-item py-2" href="seeker.html"><i class="fa-solid fa-hand-holding-heart me-2 text-theme"></i> Request Blood</a></li>
+                            <li><a class="dropdown-item py-2" href="chat.html"><i class="fa-solid fa-comments me-2 text-theme "></i> Messages</a></li>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Learn</h6></li>
+                            <li><a class="dropdown-item py-2" href="am-i-eligible.html">Am I Eligible?</a></li>
+                            <li><a class="dropdown-item py-2" href="about-blood.html">What Is Blood?</a></li>
+                            <li><a class="dropdown-item py-2" href="blood-types.html">Blood Types</a></li>
+                            <li><a class="dropdown-item py-2" href="basics.html">Donation Basics</a></li>
+                            <li><a class="dropdown-item py-2" href="prepare-to-donate.html">Prepare to Donate</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Community</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2" href="campaigns.html">Our Campaigns</a></li>
+                            <li><a class="dropdown-item py-2" href="blog.html">Latest News (Blog)</a></li>
+                            <li><a class="dropdown-item py-2 active" href="games.html">Games Area</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2" href="about-us.html">About Us</a></li>
+                            <li><a class="dropdown-item py-2" href="team.html">Our Team</a></li>
+                            <li><a class="dropdown-item py-2" href="gallery.html">Photo Gallery</a></li>
+                            <li><a class="dropdown-item py-2" href="faq.html">FAQs</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-globe me-1 text-theme"></i> Lang
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index.html"><span>English</span><img src="https://flagcdn.com/w20/us.png" width="20"></a></li>
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index-ar.html"><span style="font-family: 'Cairo', sans-serif;">العربية</span><img src="https://flagcdn.com/w20/eg.png" width="20"></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <div class="d-flex align-items-lg-center mt-3 mt-lg-0 flex-column flex-lg-row gap-3">
+                    <a href="login.html" class="text-dark text-decoration-none fw-semibold d-flex align-items-center me-lg-3 transition-hover">
+                        <i class="fa-regular fa-circle-user fs-5 me-2 text-theme"></i> Login
+                    </a>
+                    <a href="signup.html" class="btn btn-outline-theme fw-bold px-4 rounded-pill">Sign Up</a>
+                    <a href="contact.html" class="btn btn-theme text-white fw-bold px-4 rounded-pill shadow-sm">Contact</a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+   <header class="page-header-games">
+    <div class="container" data-aos="fade-up">
+        
+        <h1 class="display-4 fw-bold mb-4">Play & Save Lives 🎮</h1>
+        
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item">
+                    <a href="index.html" class="text-decoration-none">
+                        <i class="fa-solid fa-house me-1"></i> Home
+                    </a>
+                </li>
+                
+                <li class="breadcrumb-item active" aria-current="page">
+                    Games Area
+                </li>
+            </ol>
+        </nav>
+
+    </div>
+</header>
+
+    <section class="section-padding bg-light">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                
+                <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card game-card shadow-sm">
+                        <div class="game-thumb thumb-collection">
+                            <span class="game-badge">Arcade</span>
+                            <i class="fa-solid fa-droplet game-icon"></i>
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <h3 class="fw-bold mb-2">Blood Hero Ultimate</h3>
+                            <p class="text-muted mb-4">
+                                You are a Red Blood Cell! Collect healthy nutrients (Iron, Water) and avoid viruses to keep the blood healthy.
+                            </p>
+                            
+                            <div class="d-flex justify-content-center gap-3 mb-4 text-muted small">
+                                <span><i class="fa-solid fa-trophy text-warning me-1"></i> High Score</span>
+                                <span><i class="fa-solid fa-infinity text-info me-1"></i> Endless</span>
+                            </div>
+
+                            <a href="game.html" class="btn play-btn">
+                                <i class="fa-solid fa-play me-2"></i> Play Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card game-card shadow-sm">
+                        <div class="game-thumb thumb-shooter">
+                            <span class="game-badge">Shooter</span>
+                            <i class="fa-solid fa-shield-virus game-icon"></i>
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <h3 class="fw-bold mb-2">Immunity Defender</h3>
+                            <p class="text-muted mb-4">
+                                Take control of a White Blood Cell! Shoot down invading viruses and protect the body's immune system.
+                            </p>
+                            
+                            <div class="d-flex justify-content-center gap-3 mb-4 text-muted small">
+                                <span><i class="fa-solid fa-crosshairs text-danger me-1"></i> Action</span>
+                                <span><i class="fa-solid fa-bolt text-warning me-1"></i> Power-ups</span>
+                            </div>
+
+                            <a href="game-shooter.html" class="btn play-btn" style="background: linear-gradient(45deg, #0074e4, #00d2ff); border:none;">
+                                <i class="fa-solid fa-gamepad me-2"></i> Play Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-5">Why Play Our Games?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fa-solid fa-brain fa-3x text-theme mb-3"></i>
+                        <h5>Learn While Playing</h5>
+                        <p class="text-muted">Understand what makes blood healthy and how immunity works.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fa-solid fa-face-smile-beam fa-3x text-theme mb-3"></i>
+                        <h5>Stress Relief</h5>
+                        <p class="text-muted">Waiting for your donation appointment? Relax with a quick game.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fa-solid fa-medal fa-3x text-theme mb-3"></i>
+                        <h5>Challenge Friends</h5>
+                        <p class="text-muted">Compete for the highest score and share awareness.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-section">
+        <div class="footer-bottom py-3">
+            <div class="container text-center">
+                <p class="mb-0 small text-white-50">&copy; 2025 <strong>Blood Buddies</strong>. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+ <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="footer-top section-padding">
+            <div class="container">
+                <div class="row g-4">
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <a href="index.html" class="footer-logo d-inline-block mb-4 bg-white p-3 rounded">
+                                <img src="images/logo.png" alt="Logo" height="40">
+                            </a>
+                            <p class="text-white-50 mb-4">
+                                We are the world's largest and most trusted blood donation center. We have been working since 1973 with a prestigious vision to help patients.
+                            </p>
+                            <div class="social-links">
+                                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Quick Links</h5>
+                            <ul class="footer-links list-unstyled">
+                                <li><a href="about-us.html"><i class="fa-solid fa-angle-right"></i> About Us</a></li>
+                                <li><a href="campaigns.html"><i class="fa-solid fa-angle-right"></i> Our Campaigns</a></li>
+                                <li><a href="donor.html"><i class="fa-solid fa-angle-right"></i> Find a Donor</a></li>
+                                <li><a href="seeker.html"><i class="fa-solid fa-angle-right"></i> Request Blood</a></li>
+                                <li><a href="blog.html"><i class="fa-solid fa-angle-right"></i> Latest News</a></li>
+                                <li><a href="contact.html"><i class="fa-solid fa-angle-right"></i> Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Latest Campaigns</h5>
+                            
+                            <div class="recent-post-item d-flex align-items-center mb-3">
+                                <div class="recent-img me-3">
+                                    <img src="images/event_1.jpg" alt="Campaign" class="img-fluid rounded">
+                                </div>
+                                <div class="recent-text">
+                                    <h6 class="mb-1"><a href="campaign-single.html" class="text-white text-decoration-none">Blood Group Collection</a></h6>
+                                    <small class="text-theme"><i class="fa-regular fa-calendar me-1"></i> 12 Jan, 2025</small>
+                                </div>
+                            </div>
+
+                            <div class="recent-post-item d-flex align-items-center">
+                                <div class="recent-img me-3">
+                                    <img src="images/event_2.jpg" alt="Campaign" class="img-fluid rounded">
+                                </div>
+                                <div class="recent-text">
+                                    <h6 class="mb-1"><a href="campaign-single.html" class="text-white text-decoration-none">Free Blood Checking</a></h6>
+                                    <small class="text-theme"><i class="fa-regular fa-calendar me-1"></i> 18 Feb, 2025</small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Subscribe Us</h5>
+                            <p class="text-white-50 small mb-3">Signup for our newsletter to get the latest news in your inbox.</p>
+                            
+                            <form class="newsletter-form mb-4">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Email Address" required>
+                                    <button class="btn btn-theme" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </form>
+
+                            <div class="contact-info">
+                                <p class="mb-2 text-white-50"><i class="fa-solid fa-location-dot text-theme me-2"></i> 123 Tahrir Square, Cairo</p>
+                                <p class="mb-0 text-white-50"><i class="fa-solid fa-phone text-theme me-2"></i> +20 100 123 4567</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0 small text-white-50">&copy; 2025 <strong>Blood Buddies</strong>. All Rights Reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-bottom-links">
+                            <a href="#" class="small text-white-50 text-decoration-none me-3">Privacy Policy</a>
+                            <a href="#" class="small text-white-50 text-decoration-none">Terms of Use</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</html>

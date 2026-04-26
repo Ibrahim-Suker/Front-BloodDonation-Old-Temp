@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Messages - Blood Buddies</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* --- Chat Layout Styles --- */
+        body { background-color: var(--section-bg-light); }
+
+        .chat-container {
+            height: calc(100vh - 140px); /* ارتفاع مناسب للشاشة */
+            min-height: 600px;
+            background: #fff;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex;
+        }
+
+        /* 1. Sidebar (قائمة المستخدمين) */
+        .chat-sidebar {
+            width: 320px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+        }
+
+        .chat-search {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chat-users-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--section-bg-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-item:hover { background-color: var(--section-bg-light); }
+
+        .user-item.active {
+            background-color: rgba(239, 61, 50, 0.05);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .user-avatar {
+            position: relative;
+            margin-right: 15px;
+        }
+
+        .user-avatar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--light-bg);
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 2px;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+        }
+        .status-dot.online { background-color: #28a745; }
+        .status-dot.offline { background-color: #ccc; }
+
+        /* 2. Main Chat Area (منطقة المحادثة) */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+        }
+
+        .chat-header {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background-color: var(--section-bg-light);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Message Bubbles */
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 15px;
+            font-size: 0.95rem;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .msg-received {
+            align-self: flex-start;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 2px;
+            color: var(--secondary-color);
+        }
+
+        .msg-sent {
+            align-self: flex-end;
+            background-color: var(--primary-color); /* أحمر */
+            color: var(--white);
+            border-bottom-right-radius: 2px;
+            box-shadow: 0 5px 15px rgba(239, 61, 50, 0.2);
+        }
+
+        .msg-time {
+            display: block;
+            font-size: 0.7rem;
+            margin-top: 5px;
+            opacity: 0.7;
+            text-align: right;
+        }
+
+        /* Input Area */
+        .chat-footer {
+            padding: 15px 25px;
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+        }
+
+        .chat-input-wrapper {
+            background-color: var(--section-bg-light);
+            border-radius: 30px;
+            padding: 5px 15px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input-wrapper input {
+            border: none;
+            background: transparent;
+            box-shadow: none !important;
+            padding: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-container { flex-direction: column; height: auto; min-height: 80vh; }
+            .chat-sidebar { width: 100%; height: 300px; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .chat-main { height: 500px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="Blood Buddies" height="55">
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse mt-3 mt-lg-0" id="mainNav">
+                
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 main-menu fw-bold">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Blood Services</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Actions</h6></li>
+                            <li><a class="dropdown-item py-2" href="donor.html"><i class="fa-solid fa-magnifying-glass me-2 text-theme"></i> Find a Donor</a></li>
+                            <li><a class="dropdown-item py-2" href="seeker.html"><i class="fa-solid fa-hand-holding-heart me-2 text-theme"></i> Request Blood</a></li>
+                            <li><a class="dropdown-item py-2 active" href="chat.html"><i class="fa-solid fa-comments me-2 text-theme "></i> Messages</a></li>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Learn</h6></li>
+                            <li><a class="dropdown-item py-2" href="am-i-eligible.html">Am I Eligible?</a></li>
+                            <li><a class="dropdown-item py-2" href="about-blood.html">What Is Blood?</a></li>
+                            <li><a class="dropdown-item py-2" href="blood-types.html">Blood Types</a></li>
+                            <li><a class="dropdown-item py-2" href="basics.html">Donation Basics</a></li>
+                            <li><a class="dropdown-item py-2" href="prepare-to-donate.html">Prepare to Donate</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Community</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2" href="campaigns.html">Our Campaigns</a></li>
+                            <li><a class="dropdown-item py-2" href="blog.html">Latest News (Blog)</a></li>
+                            <li><a class="dropdown-item py-2" href="games.html">Games Area</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2" href="about-us.html">About Us</a></li>
+                            <li><a class="dropdown-item py-2" href="team.html">Our Team</a></li>
+                            <li><a class="dropdown-item py-2" href="gallery.html">Photo Gallery</a></li>
+                            <li><a class="dropdown-item py-2" href="faq.html">FAQs</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-globe me-1 text-theme"></i> Lang
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index.html"><span>English</span><img src="https://flagcdn.com/w20/us.png" width="20"></a></li>
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index-ar.html"><span style="font-family: 'Cairo', sans-serif;">العربية</span><img src="https://flagcdn.com/w20/eg.png" width="20"></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <div class="d-flex align-items-lg-center mt-3 mt-lg-0 flex-column flex-lg-row gap-3">
+                    <a href="login.html" class="text-dark text-decoration-none fw-semibold d-flex align-items-center me-lg-3 transition-hover">
+                        <i class="fa-regular fa-circle-user fs-5 me-2 text-theme"></i> Login
+                    </a>
+                    <a href="signup.html" class="btn btn-outline-theme fw-bold px-4 rounded-pill">Sign Up</a>
+                    <a href="contact.html" class="btn btn-theme text-white fw-bold px-4 rounded-pill shadow-sm">Contact</a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+     <section class="page-header bg-secondary py-5 text-white text-center" style="background-image: url('images/home_1_slider_1.jpg'); background-size: cover; position: relative;">
+        <div class="overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6);"></div>
+        <div class="container position-relative z-1 py-5">
+            <h1 class="fw-bold display-4" data-aos="fade-down">Contact Donor</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                    <li class="breadcrumb-item"><a href="index.html" class="text-white text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active text-theme" aria-current="page">Message</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="chat-container">
+                
+                <div class="chat-sidebar">
+                    <div class="chat-search">
+                        <h5 class="fw-bold mb-3">Chats</h5>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                            <input type="text" class="form-control bg-light border-start-0" placeholder="Search...">
+                        </div>
+                    </div>
+
+                    <div class="chat-users-list">
+                        <div class="user-item active">
+                            <div class="user-avatar">
+                                <img src="images/user_1.jpg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4128/4128176.png'" alt="User">
+                                <span class="status-dot online"></span>
+                            </div>
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0 fw-bold text-dark">Ahmed Mohamed</h6>
+                                    <small class="text-muted" style="font-size: 0.75rem;">10:08 AM</small>
+                                </div>
+                                <p class="text-muted small mb-0 text-truncate">I am on my way to the hospital.</p>
+                            </div>
+                        </div>
+
+                        <div class="user-item">
+                            <div class="user-avatar">
+                                <img src="images/user_2.jpg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4128/4128244.png'" alt="User">
+                                <span class="status-dot offline"></span>
+                            </div>
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0 fw-bold text-dark">Sarah Jenkins</h6>
+                                    <small class="text-muted" style="font-size: 0.75rem;">Yesterday</small>
+                                </div>
+                                <p class="text-muted small mb-0 text-truncate">Can you donate O+ blood?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-main">
+                    
+                    <div class="chat-header">
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar me-3">
+                                <img src="images/user_1.jpg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4128/4128176.png'" alt="User" width="45" height="45">
+                                <span class="status-dot online"></span>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Ahmed Mohamed</h6>
+                                <small class="text-success fw-bold"><i class="fa-solid fa-circle fa-xs me-1"></i>Online</small>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown">
+                            <button class="btn btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                                <li><a class="dropdown-item" href="donor.html">View Profile</a></li>
+                                <li><a class="dropdown-item text-danger" href="#">Block User</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="chat-body" id="chatBody">
+                        <div class="text-center my-3">
+                            <span class="badge bg-white text-muted border fw-normal px-3 py-1 rounded-pill">Today</span>
+                        </div>
+
+                        <div class="message-bubble msg-received">
+                            Hello! Is your blood donation request still active?
+                            <span class="msg-time">10:00 AM</span>
+                        </div>
+
+                        <div class="message-bubble msg-sent">
+                            Yes, we need a donor for A+ blood urgently at Mansoura Hospital.
+                            <span class="msg-time">10:05 AM <i class="fa-solid fa-check-double ms-1"></i></span>
+                        </div>
+
+                        <div class="message-bubble msg-received">
+                            Okay, I am nearby. I can be there in 20 minutes.
+                            <span class="msg-time">10:06 AM</span>
+                        </div>
+
+                         <div class="message-bubble msg-sent">
+                            That saves a life! Thank you, Ahmed. Please text me when you arrive.
+                            <span class="msg-time">10:07 AM <i class="fa-solid fa-check-double ms-1"></i></span>
+                        </div>
+                        
+                        <div class="message-bubble msg-received">
+                            Sure, on my way.
+                            <span class="msg-time">10:08 AM</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-footer">
+                        <form class="chat-input-wrapper">
+                            <button type="button" class="btn text-muted p-2"><i class="fa-solid fa-paperclip"></i></button>
+                            <input type="text" class="form-control" placeholder="Type a message..." required>
+                            <button type="button" class="btn text-muted p-2"><i class="fa-regular fa-face-smile"></i></button>
+                            <button type="submit" class="btn btn-theme rounded-circle ms-2" style="width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-section">
+        <div class="footer-top section-padding">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <a href="index.html" class="footer-logo d-inline-block mb-4 bg-white p-3 rounded">
+                                <img src="images/logo.png" alt="Logo" height="40">
+                            </a>
+                            <p class="text-white-50 mb-4">
+                                We are the world's largest and most trusted blood donation center. We have been working since 1973 with a prestigious vision to help patients.
+                            </p>
+                            <div class="social-links">
+                                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Quick Links</h5>
+                            <ul class="footer-links list-unstyled">
+                                <li><a href="about-us.html"><i class="fa-solid fa-angle-right"></i> About Us</a></li>
+                                <li><a href="campaigns.html"><i class="fa-solid fa-angle-right"></i> Our Campaigns</a></li>
+                                <li><a href="donor.html"><i class="fa-solid fa-angle-right"></i> Find a Donor</a></li>
+                                <li><a href="seeker.html"><i class="fa-solid fa-angle-right"></i> Request Blood</a></li>
+                                <li><a href="blog.html"><i class="fa-solid fa-angle-right"></i> Latest News</a></li>
+                                <li><a href="contact.html"><i class="fa-solid fa-angle-right"></i> Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Latest Campaigns</h5>
+                            <div class="recent-post-item d-flex align-items-center mb-3">
+                                <div class="recent-img me-3">
+                                    <img src="images/event_1.jpg" alt="Campaign" class="img-fluid rounded">
+                                </div>
+                                <div class="recent-text">
+                                    <h6 class="mb-1"><a href="campaign-single.html" class="text-white text-decoration-none">Blood Group Collection</a></h6>
+                                    <small class="text-theme"><i class="fa-regular fa-calendar me-1"></i> 12 Jan, 2025</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Subscribe Us</h5>
+                            <p class="text-white-50 small mb-3">Signup for our newsletter to get the latest news in your inbox.</p>
+                            <form class="newsletter-form mb-4">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Email Address" required>
+                                    <button class="btn btn-theme" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </form>
+                            <div class="contact-info">
+                                <p class="mb-2 text-white-50"><i class="fa-solid fa-location-dot text-theme me-2"></i> 123 Tahrir Square, Cairo</p>
+                                <p class="mb-0 text-white-50"><i class="fa-solid fa-phone text-theme me-2"></i> +20 100 123 4567</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0 small text-white-50">&copy; 2025 <strong>Blood Buddies</strong>. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+        AOS.init();
+        
+        // كود بسيط لإنزال الشات للأسفل عند التحميل
+        window.onload = function() {
+            var chatBody = document.getElementById("chatBody");
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
+
+</body>
+</html>

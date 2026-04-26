@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up - Blood Buddies</title>
+    <meta name="description" content="Register as a blood donor">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="Blood Buddies" height="55">
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse mt-3 mt-lg-0" id="mainNav">
+                
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 main-menu fw-bold">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Blood Services</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Actions</h6></li>
+                            <li><a class="dropdown-item py-2" href="donor.html"><i class="fa-solid fa-magnifying-glass me-2 text-theme"></i> Find a Donor</a></li>
+                            <li><a class="dropdown-item py-2" href="seeker.html"><i class="fa-solid fa-hand-holding-heart me-2 text-theme"></i> Request Blood</a></li>
+                            <li><a class="dropdown-item py-2" href="chat.html"><i class="fa-solid fa-comments me-2 text-theme "></i> Messages</a></li>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><h6 class="dropdown-header text-uppercase small fw-bold text-muted">Learn</h6></li>
+                            <li><a class="dropdown-item py-2" href="am-i-eligible.html">Am I Eligible?</a></li>
+                            <li><a class="dropdown-item py-2" href="about-blood.html">What Is Blood?</a></li>
+                            <li><a class="dropdown-item py-2" href="blood-types.html">Blood Types</a></li>
+                            <li><a class="dropdown-item py-2" href="basics.html">Donation Basics</a></li>
+                            <li><a class="dropdown-item py-2" href="prepare-to-donate.html">Prepare to Donate</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Community</a>
+                        <ul class="dropdown-menu border-0 shadow animate__animated animate__fadeInUp rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2" href="campaigns.html">Our Campaigns</a></li>
+                            <li><a class="dropdown-item py-2" href="blog.html">Latest News (Blog)</a></li>
+                            <li><a class="dropdown-item py-2" href="games.html">Games Area</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2" href="about-us.html">About Us</a></li>
+                            <li><a class="dropdown-item py-2" href="team.html">Our Team</a></li>
+                            <li><a class="dropdown-item py-2" href="gallery.html">Photo Gallery</a></li>
+                            <li><a class="dropdown-item py-2" href="faq.html">FAQs</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-globe me-1 text-theme"></i> Lang
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow rounded-3 overflow-hidden">
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index.html"><span>English</span><img src="https://flagcdn.com/w20/us.png" width="20"></a></li>
+                            <li><a class="dropdown-item py-2 d-flex justify-content-between" href="index-ar.html"><span style="font-family: 'Cairo', sans-serif;">العربية</span><img src="https://flagcdn.com/w20/eg.png" width="20"></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <div class="d-flex align-items-lg-center mt-3 mt-lg-0 flex-column flex-lg-row gap-3">
+                    <a href="login.html" class="text-dark text-decoration-none fw-semibold d-flex align-items-center me-lg-3 transition-hover">
+                        <i class="fa-regular fa-circle-user fs-5 me-2 text-theme"></i> Login
+                    </a>
+                    <a href="signup.html" class="btn btn-outline-theme fw-bold px-4 rounded-pill">Sign Up</a>
+                    <a href="contact.html" class="btn btn-theme text-white fw-bold px-4 rounded-pill shadow-sm">Contact</a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+<section class="page-header bg-secondary py-5 text-white text-center" style="background-image: url('images/home_1_slider_1.jpg'); background-size: cover; position: relative;">
+    <div class="overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6);"></div>
+    <div class="container position-relative z-1 py-5">
+        <h1 class="fw-bold display-4" data-aos="fade-down">Donor Profile</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item"><a href="index.html" class="text-white text-decoration-none">Home</a></li>
+                <li class="breadcrumb-item active text-theme" aria-current="page">Profile</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+    <section class="section-padding bg-light">
+        <div class="container">
+            <div class="row g-4">
+                
+                <div class="col-lg-3">
+                    <div class="profile-card text-center" data-aos="fade-right">
+                        <div class="profile-img-container">
+                            <img src="https://placehold.co/150x150/ef3d32/ffffff?text=User" alt="User Profile Image">
+                        </div>
+                        <h3 class="fw-bold">Mohamed Ali</h3>
+                        <p class="text-muted small">Active Donor | Blood Type: <span class="fw-bold text-theme">O+</span></p>
+                        <a href="#" class="btn btn-sm btn-outline-danger mt-2">Edit Profile</a>
+                        
+                        <hr class="my-4">
+                        
+                        <ul class="nav nav-pills flex-column" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active w-100 mb-2" id="info-tab" data-bs-toggle="pill" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true"><i class="fa-solid fa-user me-2"></i> Personal Information</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link w-100 mb-2" id="history-tab" data-bs-toggle="pill" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false"><i class="fa-solid fa-list-check me-2"></i> Donation History</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link w-100 mb-2" id="settings-tab" data-bs-toggle="pill" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false"><i class="fa-solid fa-gear me-2"></i> Settings</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link w-100 mb-2" id="logout-tab" type="button"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-9">
+                    <div class="tab-content" id="profileTabsContent">
+                        
+                        <div class="tab-pane fade show active profile-card" id="info" role="tabpanel" aria-labelledby="info-tab" data-aos="fade-up">
+                            <h4 class="fw-bold text-theme mb-4">Account Summary & Statistics</h4>
+                            
+                            <div class="row g-3 mb-5">
+                                <div class="col-md-4">
+                                    <div class="stats-box">
+                                        <h4>12</h4>
+                                        <p>Total Donations</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stats-box">
+                                        <h4>275</h4>
+                                        <p>Days until next eligible donation</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stats-box">
+                                        <h4>5+</h4>
+                                        <p>Lives Saved</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h5 class="fw-bold mb-3">Contact Details</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small text-muted">Full Name</label>
+                                    <input type="text" class="form-control" value="Mohamed Ali" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small text-muted">Email Address</label>
+                                    <input type="email" class="form-control" value="mohamed.ali@example.com" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small text-muted">Phone Number</label>
+                                    <input type="text" class="form-control" value="+20 100 123 4567" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small text-muted">Date of Birth</label>
+                                    <input type="text" class="form-control" value="1990-05-15" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade profile-card" id="history" role="tabpanel" aria-labelledby="history-tab" data-aos="fade-up">
+                            <h4 class="fw-bold text-theme mb-4">Donation History</h4>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Location</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>2024-01-10</td>
+                                            <td>Whole Blood</td>
+                                            <td>Head Center - Cairo</td>
+                                            <td><span class="badge bg-success">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>2023-09-05</td>
+                                            <td>Plasma</td>
+                                            <td>Mobile Donation Unit</td>
+                                            <td><span class="badge bg-success">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td>2023-05-20</td>
+                                            <td>Whole Blood</td>
+                                            <td>Head Center - Cairo</td>
+                                            <td><span class="badge bg-danger">Deferred (Travel)</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="tab-pane fade profile-card" id="settings" role="tabpanel" aria-labelledby="settings-tab" data-aos="fade-up">
+                            <h4 class="fw-bold text-theme mb-4">Account Settings</h4>
+                            
+                            <form>
+                                <div class="mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="notificationSwitch" checked>
+                                    <label class="form-check-label" for="notificationSwitch">Receive notifications about upcoming blood drives</label>
+                                </div>
+                                <div class="mb-4 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="publicProfileSwitch">
+                                    <label class="form-check-label" for="publicProfileSwitch">Make my profile searchable by blood seekers</label>
+                                </div>
+                                
+                                <h5 class="fw-bold mb-3">Change Password</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Current Password</label>
+                                        <input type="password" class="form-control" placeholder="Enter current password">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">New Password</label>
+                                        <input type="password" class="form-control" placeholder="Enter new password">
+                                    </div>
+                                    <div class="col-12 mt-4">
+                                        <button type="submit" class="btn btn-theme">Save Settings</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="footer-top section-padding">
+            <div class="container">
+                <div class="row g-4">
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <a href="index.html" class="footer-logo d-inline-block mb-4 bg-white p-3 rounded">
+                                <img src="images/logo.png" alt="Logo" height="40">
+                            </a>
+                            <p class="text-white-50 mb-4">
+                                We are the world's largest and most trusted blood donation center. We have been working since 1973 with a prestigious vision to help patients.
+                            </p>
+                            <div class="social-links">
+                                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Quick Links</h5>
+                            <ul class="footer-links list-unstyled">
+                                <li><a href="about-us.html"><i class="fa-solid fa-angle-right"></i> About Us</a></li>
+                                <li><a href="campaigns.html"><i class="fa-solid fa-angle-right"></i> Our Campaigns</a></li>
+                                <li><a href="donor.html"><i class="fa-solid fa-angle-right"></i> Find a Donor</a></li>
+                                <li><a href="seeker.html"><i class="fa-solid fa-angle-right"></i> Request Blood</a></li>
+                                <li><a href="blog.html"><i class="fa-solid fa-angle-right"></i> Latest News</a></li>
+                                <li><a href="contact.html"><i class="fa-solid fa-angle-right"></i> Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Latest Campaigns</h5>
+                            
+                            <div class="recent-post-item d-flex align-items-center mb-3">
+                                <div class="recent-img me-3">
+                                    <img src="images/event_1.jpg" alt="Campaign" class="img-fluid rounded">
+                                </div>
+                                <div class="recent-text">
+                                    <h6 class="mb-1"><a href="campaign-single.html" class="text-white text-decoration-none">Blood Group Collection</a></h6>
+                                    <small class="text-theme"><i class="fa-regular fa-calendar me-1"></i> 12 Jan, 2025</small>
+                                </div>
+                            </div>
+
+                            <div class="recent-post-item d-flex align-items-center">
+                                <div class="recent-img me-3">
+                                    <img src="images/event_2.jpg" alt="Campaign" class="img-fluid rounded">
+                                </div>
+                                <div class="recent-text">
+                                    <h6 class="mb-1"><a href="campaign-single.html" class="text-white text-decoration-none">Free Blood Checking</a></h6>
+                                    <small class="text-theme"><i class="fa-regular fa-calendar me-1"></i> 18 Feb, 2025</small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Subscribe Us</h5>
+                            <p class="text-white-50 small mb-3">Signup for our newsletter to get the latest news in your inbox.</p>
+                            
+                            <form class="newsletter-form mb-4">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Email Address" required>
+                                    <button class="btn btn-theme" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </form>
+
+                            <div class="contact-info">
+                                <p class="mb-2 text-white-50"><i class="fa-solid fa-location-dot text-theme me-2"></i> 123 Tahrir Square, Cairo</p>
+                                <p class="mb-0 text-white-50"><i class="fa-solid fa-phone text-theme me-2"></i> +20 100 123 4567</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0 small text-white-50">&copy; 2025 <strong>Blood Buddies</strong>. All Rights Reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-bottom-links">
+                            <a href="#" class="small text-white-50 text-decoration-none me-3">Privacy Policy</a>
+                            <a href="#" class="small text-white-50 text-decoration-none">Terms of Use</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

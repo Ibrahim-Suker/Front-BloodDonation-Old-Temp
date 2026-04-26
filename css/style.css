@@ -1,0 +1,918 @@
+/* ----------------------------------------------------------------
+    1. VARIABLES & GLOBAL STYLES (إعدادات الألوان العامة)
+----------------------------------------------------------------- */
+:root {
+    /* == الألوان الرئيسية == */
+    --primary-color: #ef3d32;       /* اللون الأحمر الأساسي */
+    --primary-dark: #c92b22;        /* درجة أغمق للوقوف */
+    --primary-faint: rgba(239, 61, 50, 0.1); /* شفاف جداً */
+
+    /* == ألوان النصوص والخلفيات == */
+    --secondary-color: #333333;     
+    --text-muted: #777777;          
+    --light-bg: #f9f9f9;            
+    --white: #ffffff;
+    --black: #000000;
+
+    /* == عناصر أخرى == */
+    --border-color: #dddddd;        
+    --footer-bg: #222222;           
+    --footer-text: #bbbbbb;         
+
+    /* متغيرات الصفحات الجديدة */
+    --section-bg-light: #f8f9fa;
+    --border-radius: 8px;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--secondary-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    transition: all 0.3s ease;
+    color: inherit;
+}
+
+/* Utilities */
+.text-theme { color: var(--primary-color) !important; }
+.bg-theme { background-color: var(--primary-color) !important; }
+.section-padding { padding: 80px 0; }
+.divider {
+    width: 50px;
+    height: 3px;
+    background: var(--primary-color);
+    margin: 15px auto;
+}
+.object-fit-cover { object-fit: cover; }
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.text-center { text-align: center; }
+.mb-4 { margin-bottom: 2rem; }
+
+/* ----------------------------------------------------------------
+    2. BUTTONS
+----------------------------------------------------------------- */
+.btn-theme {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: 2px solid var(--primary-color);
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-theme:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+    color: var(--white) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4) !important;
+}
+
+.btn-outline-light:hover {
+    background-color: var(--white);
+    color: var(--black);
+}
+
+/* زرار Sign Up الجديد (Outline Style) */
+.btn-outline-theme {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-theme:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+    box-shadow: 0 5px 15px rgba(239, 61, 50, 0.3);
+    transform: translateY(-2px);
+}
+
+/* ----------------------------------------------------------------
+    3. TOP BAR & NAVBAR (تحديث شامل)
+----------------------------------------------------------------- */
+.top-bar {
+    font-size: 0.9rem;
+}
+
+.social-icons a {
+    transition: transform 0.3s;
+    display: inline-block;
+}
+
+.social-icons a:hover {
+    transform: translateY(-3px);
+}
+
+/* Navbar Container */
+.navbar {
+    min-height: 80px;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05) !important; /* ظل خفيف */
+}
+
+/* Main Menu Links */
+.main-menu .nav-link {
+    color: var(--secondary-color) !important;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 10px 15px !important;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Hover Underline Effect (الخط الأحمر المتحرك) */
+.main-menu .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+.main-menu .nav-link:hover::after,
+.main-menu .nav-link.active::after {
+    width: 70%; 
+    opacity: 1;
+}
+
+.main-menu .nav-link:hover,
+.main-menu .nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* Dropdown Menu Enhancements */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px !important;
+    border-top: 3px solid var(--primary-color) !important;
+}
+
+.dropdown-item {
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: var(--light-bg);
+    color: var(--primary-color) !important;
+    padding-left: 20px; /* حركة لليمين */
+}
+
+.dropdown-item.active {
+    background-color: var(--primary-color) !important;
+    color: var(--white) !important;
+}
+
+/* ----------------------------------------------------------------
+    4. HERO SECTION & PAGE HEADERS
+----------------------------------------------------------------- */
+.hero-slider .carousel-item {
+    height: 90vh;
+    min-height: 500px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.page-header {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero-slider .overlay,
+.page-header .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-caption {
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ----------------------------------------------------------------
+    5. COMPONENTS (Cards, Video, Forms)
+----------------------------------------------------------------- */
+/* Video Play Button */
+.video-btn { position: relative; display: block; }
+.play-btn {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px; height: 60px;
+    background: var(--primary-color);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 61, 50, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(239, 61, 50, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 61, 50, 0); }
+}
+
+/* General Card Styling */
+.card {
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover, .campaign-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Forms */
+.form-control, .form-select {
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: none;
+    border-color: var(--primary-color);
+}
+
+/* Hover Zoom Effect */
+.hover-zoom {
+    transition: transform 0.3s ease;
+    display: block;
+    overflow: hidden;
+}
+.hover-zoom:hover {
+    transform: scale(1.03);
+}
+
+/* ----------------------------------------------------------------
+    6. TEAM SECTION
+----------------------------------------------------------------- */
+.team-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.team-img-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.team-img-wrapper img {
+    transition: transform 0.5s ease;
+}
+
+.team-card:hover .team-img-wrapper img {
+    transform: scale(1.1);
+}
+
+.team-social {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    width: 100%;
+    background: rgba(239, 61, 50, 0.9);
+    padding: 10px 0;
+    transition: bottom 0.3s ease;
+}
+
+.team-card:hover .team-social {
+    bottom: 0;
+}
+
+.team-social a {
+    color: var(--white);
+    margin: 0 10px;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.team-social a:hover {
+    color: var(--secondary-color);
+}
+
+.teamSwiper {
+    padding: 20px 10px 50px 10px !important;
+}
+
+@media (min-width: 992px) {
+    .teamSwiper .swiper-slide {
+        height: auto; 
+    }
+}
+
+/* ----------------------------------------------------------------
+    7. SPONSORS SECTION
+----------------------------------------------------------------- */
+.sponsor-logo {
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    max-height: 80px;
+    width: auto;
+    display: inline-block;
+}
+
+.sponsor-logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* ----------------------------------------------------------------
+    8. NEW FOOTER STYLES
+----------------------------------------------------------------- */
+.footer-section {
+    background-color: #151515; /* لون خلفية أغمق */
+    color: #ffffff;
+    font-size: 0.95rem;
+    position: relative;
+    border-top: 5px solid var(--primary-color); /* خط أحمر من فوق */
+}
+
+/* المسافات */
+.footer-top {
+    padding: 80px 0 60px;
+}
+
+/* عناوين الأقسام */
+.widget-title {
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    position: relative;
+    color: var(--white);
+    text-transform: uppercase;
+    font-size: 1.1rem;
+}
+
+/* الخط الأحمر تحت العناوين */
+.widget-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+/* روابط الفوتر */
+.footer-links li {
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.footer-links a {
+    color: #bbbbbb;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer-links a i {
+    font-size: 0.8rem;
+    margin-right: 8px;
+    color: var(--primary-color);
+    transition: margin-right 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--white);
+    padding-left: 5px; /* حركة لليمين */
+}
+
+/* أيقونات السوشيال ميديا */
+.social-links a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+/* آخر الحملات (Recent Posts) */
+.recent-post-item {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 15px;
+}
+.recent-post-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.recent-img img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.1);
+    transition: all 0.3s;
+}
+
+.recent-post-item:hover .recent-img img {
+    border-color: var(--primary-color);
+}
+
+.recent-text h6 a {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: color 0.3s;
+}
+
+.recent-text h6 a:hover {
+    color: var(--primary-color) !important;
+}
+
+/* فورم النشرة البريدية (Newsletter) */
+.newsletter-form .form-control {
+    background-color: rgba(255,255,255,0.05);
+    border: none;
+    color: var(--white);
+    padding: 12px;
+    border-radius: 4px 0 0 4px;
+}
+
+.newsletter-form .form-control:focus {
+    background-color: rgba(255,255,255,0.1);
+    box-shadow: none;
+}
+
+.newsletter-form .btn-theme {
+    border-radius: 0 4px 4px 0;
+}
+
+/* الجزء السفلي (Copyright) */
+.footer-bottom {
+    background-color: #0b0b0b;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer-bottom-links a:hover {
+    color: var(--primary-color) !important;
+}
+
+/* ----------------------------------------------------------------
+    9. BLOOD DONATION BASICS
+----------------------------------------------------------------- */
+.top-alert-bar {
+    background-color: var(--primary-dark);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.step-row {
+    padding: 60px 0;
+    background-color: var(--section-bg-light);
+}
+
+.step-row:nth-child(even) {
+    background-color: var(--white);
+}
+
+.split-layout {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.text-content { flex: 1; }
+.image-content { flex: 1; }
+
+.image-content img {
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    height: 350px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.text-content h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+}
+
+.text-content p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.reverse-layout .split-layout {
+    flex-direction: row-reverse;
+}
+
+/* About Blood Section */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.about-text h2 { font-size: 2rem; margin-bottom: 20px; }
+.about-text p { margin-bottom: 25px; color: var(--text-muted); }
+
+.btn-outline {
+    border: 2px solid var(--border-color);
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-weight: 500;
+    display: inline-block;
+    color: var(--secondary-color);
+}
+.btn-outline:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.about-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+.about-images img {
+    border-radius: var(--border-radius);
+    height: 120px;
+    width: 100%;
+}
+
+/* Donation Methods */
+.donation-methods .container {
+    padding: 40px;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.methods-wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.methods-list { flex: 1; }
+.methods-image { flex: 1; }
+
+.methods-image img {
+    border-radius: var(--border-radius);
+    height: 400px;
+    object-position: top;
+}
+
+.method-item {
+    padding: 20px;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+}
+
+.method-item:hover, .method-item.active {
+    background: var(--light-bg);
+    border-left-color: var(--primary-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+}
+
+.method-item h3 { margin-bottom: 5px; font-size: 1.2rem; }
+.method-item p { font-size: 0.95rem; color: var(--text-muted); margin: 0; }
+
+/* Info Cards (Grid) */
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.card .card-img { position: relative; height: 200px; }
+.card .card-img img { height: 100%; width: 100%; }
+
+.card-body { padding: 25px; }
+.card-body h3 { font-size: 1.3rem; margin-bottom: 10px; }
+.card-body p { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+
+.link-red {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.overlay-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* ----------------------------------------------------------------
+    9.5. BOOTSTRAP OVERRIDES (Nav Pills)
+----------------------------------------------------------------- */
+.nav-pills .nav-link.active, 
+.nav-pills .nav-link.active:focus,
+.nav-pills .nav-link.active:hover {
+    background-color: var(--primary-color) !important; 
+    color: var(--white) !important; 
+    border: 2px solid var(--primary-color) !important;
+    box-shadow: none !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.nav-pills .nav-link.active:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+.nav-pills .nav-link:not(.active) {
+    color: var(--secondary-color) !important; 
+    border: 1px solid var(--border-color); 
+    background-color: var(--white);
+    padding: 10px 25px;
+}
+
+.nav-pills .nav-link:not(.active):hover {
+    color: var(--primary-color) !important; 
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-faint); 
+}
+
+/* ----------------------------------------------------------------
+    10. RESPONSIVE DESIGN (Global Breakpoints)
+----------------------------------------------------------------- */
+@media (max-width: 1200px) {
+    .section-padding { padding: 60px 0; }
+    .hero-slider .carousel-item { height: 70vh; }
+}
+
+@media (max-width: 992px) {
+    .split-layout, .methods-wrapper, .about-grid {
+        flex-direction: column;
+        grid-template-columns: 1fr;
+    }
+    .reverse-layout .split-layout { flex-direction: column; }
+    .image-content, .methods-image { width: 100%; }
+    .image-content img { height: 300px; }
+    .about-images { grid-template-columns: repeat(3, 1fr); }
+
+    .navbar-nav .nav-link { margin-right: 0; padding: 12px 0; text-align: center; }
+    .page-header { padding: 80px 0; background-position: center; }
+    .card, .team-card { margin-bottom: 25px; }
+    .col-lg-4, .col-lg-3, .col-lg-6 { margin-bottom: 25px; }
+    .hero-slider .carousel-item { height: 60vh; }
+}
+
+@media (max-width: 768px) {
+    body { font-size: 15px; }
+    .section-padding { padding: 50px 0; }
+    .image-content img { height: 250px; }
+    .donation-methods .container { padding: 20px; }
+    .carousel-caption h1, .carousel-caption h2 { font-size: 1.8rem; line-height: 1.3; }
+    .carousel-caption p { font-size: 1rem; }
+    .btn-theme { padding: 8px 18px; font-size: 0.9rem; }
+    .hover-zoom img, .team-img-wrapper img { object-fit: cover; width: 100%; height: auto; }
+    .team-social { bottom: 0; }
+}
+
+@media (max-width: 576px) {
+    body { font-size: 14px; }
+    .section-padding { padding: 40px 0; }
+    .hero-slider .carousel-item { height: 50vh; }
+    .carousel-caption h1, .carousel-caption h2 { font-size: 1.5rem; }
+    footer { text-align: center; }
+    footer .col-md-4 { margin-bottom: 20px; }
+}
+
+@media (max-width: 400px) {
+    .btn-theme { padding: 7px 15px; font-size: 0.85rem; }
+    .carousel-caption p { font-size: 0.9rem; }
+    .divider { width: 35px; }
+}
+
+/* ----------------------------------------------------------------
+    تنسيقات صفحة الاستعداد للتبرع (Prepare to Donate)
+----------------------------------------------------------------- */
+.donation-step-row { padding: 60px 0; }
+.step-text h3 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+.step-text ul { list-style: none; padding-left: 0; }
+.step-text ul li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    position: relative;
+    padding-left: 25px;
+}
+.step-text ul li::before {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--primary-color);
+    position: absolute;
+    left: 0; top: 2px;
+}
+.icon-card {
+    text-align: center;
+    padding: 30px 20px;
+    transition: transform 0.3s ease;
+}
+.icon-card:hover { transform: translateY(-5px); }
+.icon-card i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* ----------------------------------------------------------------
+    تنسيقات صفحة فصائل الدم (Blood Types)
+----------------------------------------------------------------- */
+.page-intro-target {
+    padding: 80px 0;
+    background-color: var(--light-bg);
+}
+.page-intro-target h1 { color: var(--primary-color); }
+.blood-type-grid {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+.blood-type-grid span {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: 700;
+    color: white;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: default;
+}
+.blood-type-grid span:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.type-details {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.type-details h3 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+.impact-section {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 80px 0;
+    position: relative;
+    background-size: cover;
+}
+.procedure-card {
+    text-align: center;
+    padding: 30px;
+    background: var(--white);
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--light-bg);
+}
+.procedure-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+.procedure-icon {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+.procedure-card:hover .procedure-icon {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* ----------------------------------------------------------------
+    تنسيقات صفحة "عن الدم" (About Blood)
+----------------------------------------------------------------- */
+.page-intro-blood {
+    padding: 80px 0 40px;
+    background-color: var(--white);
+}
+.section-split {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.blood-component-text h4 {
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 20px;
+}
+.need-card {
+    min-height: 250px;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border-color);
+    background-color: var(--white);
+    border-radius: 8px;
+}
+.need-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+    border-color: transparent;
+}
+.need-card i {
+    font-size: 2.5rem;
+    color: white;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    background-color: #007bff;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+.need-card.time-card i {
+    background-color: var(--primary-color);
+}
+.making-impact-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: left;
+    margin-bottom: 20px;
+    background: var(--white);
+    transition: transform 0.3s ease;
+}
+.making-impact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+.making-impact-card img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+}
